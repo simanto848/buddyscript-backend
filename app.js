@@ -27,7 +27,7 @@ app.use(morgan("dev"));
 
 app.get("/", (req, res) => {
     return res.status(200).json({
-        // url: req.url,
+        url: req.originalUrl,
         success: true,
         message: "Server is running.",
     });
@@ -37,7 +37,7 @@ app.get("/", (req, res) => {
 
 app.use((req, res) => {
     return res.status(404).json({
-        // url: req.url,
+        url: req.originalUrl,
         success: false,
         message: "Route not found!",
     });
