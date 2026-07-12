@@ -4,6 +4,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import compression from "compression";
+import router from "./routes/index.js";
 
 const app = express();
 
@@ -34,12 +35,25 @@ app.get("/", (req, res) => {
 });
 
 // Routes
+app.use("/api", router);
 
 app.use((req, res) => {
     return res.status(404).json({
         url: req.originalUrl,
         success: false,
         message: "Route not found!",
+    });
+});
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+    const statusCode = err.statusCode || 500;
+    const message = err.message || "Internal Server Error";
+    return res.status(statusCode).json({
+        success: false,
+        statusCode,
+        message,
+        stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
     });
 });
 
