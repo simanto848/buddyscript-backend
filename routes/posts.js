@@ -10,6 +10,9 @@ router.use(authMiddleware);
 
 router.post("/", upload.single("image"), postController.createPost);
 router.get("/", postController.getPosts);
+router.get("/:id", postController.getPostById);
+router.put("/:id", upload.single("image"), postController.updatePost);
+router.delete("/:id", postController.deletePost);
 router.post("/:id/like", postController.toggleLikePost);
 router.post("/:id/comments", postController.addComment);
 router.get("/:id/comments", postController.getComments);

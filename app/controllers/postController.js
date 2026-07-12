@@ -51,6 +51,36 @@ class PostController {
             next(error);
         }
     }
+
+    async getPostById(req, res, next) {
+        try {
+            const data = await PostService.getPostById(req.params.id, req.user._id);
+            const response = new ApiResponse(200, "Post retrieved successfully.", data);
+            return res.status(response.statusCode).json(response);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async updatePost(req, res, next) {
+        try {
+            const data = await PostService.updatePost(req.params.id, req.body, req.file, req.user._id);
+            const response = new ApiResponse(200, "Post updated successfully.", data);
+            return res.status(response.statusCode).json(response);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async deletePost(req, res, next) {
+        try {
+            const data = await PostService.deletePost(req.params.id, req.user._id);
+            const response = new ApiResponse(200, "Post deleted successfully.", data);
+            return res.status(response.statusCode).json(response);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default new PostController();
