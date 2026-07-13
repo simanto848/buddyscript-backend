@@ -18,9 +18,10 @@ class CommentService {
         }
 
         await comment.save();
-        return await comment
-            .populate("author", "firstName lastName avatar")
-            .populate("likes", "firstName lastName avatar");
+        return await comment.populate([
+            { path: "author", select: "firstName lastName avatar" },
+            { path: "likes", select: "firstName lastName avatar" }
+        ]);
     }
 
     async addReply(commentId, userId, text) {

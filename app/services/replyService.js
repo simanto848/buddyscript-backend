@@ -17,9 +17,10 @@ class ReplyService {
         }
 
         await reply.save();
-        return await reply
-            .populate("author", "firstName lastName avatar")
-            .populate("likes", "firstName lastName avatar");
+        return await reply.populate([
+            { path: "author", select: "firstName lastName avatar" },
+            { path: "likes", select: "firstName lastName avatar" }
+        ]);
     }
 }
 
