@@ -42,6 +42,21 @@ class CommentService {
 
         return await reply.populate("author", "firstName lastName avatar");
     }
+
+    async deleteComment(commentId, userId) {
+        const comment = await Comment.findById(commentId).populate("post");
+        if (!comment) {
+            throw new ApiError(404, "Comment not found.");
+        }
+
+        if (comment.author.toString() !== userId.toString() && comment.post.author.toString() !== userId.toString()) {
+            throw new ApiError(403, "You are not authorized to delete this comment.");
+        }
+
+        await Reply.deleteMany({ comment: commentId });
+        await Comment.findByIdAndDelete(commentId);
+        return { message: "Comment deleted successfully." };
+    }
 }
 
 export default new CommentService();

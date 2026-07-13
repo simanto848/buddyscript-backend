@@ -21,6 +21,16 @@ class CommentController {
             next(error);
         }
     }
+
+    async deleteComment(req, res, next) {
+        try {
+            const data = await CommentService.deleteComment(req.params.id, req.user._id);
+            const response = new ApiResponse(200, "Comment deleted successfully.", data);
+            return res.status(response.statusCode).json(response);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default new CommentController();

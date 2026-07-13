@@ -11,6 +11,16 @@ class ReplyController {
             next(error);
         }
     }
+
+    async deleteReply(req, res, next) {
+        try {
+            const data = await ReplyService.deleteReply(req.params.id, req.user._id);
+            const response = new ApiResponse(200, "Reply deleted successfully.", data);
+            return res.status(response.statusCode).json(response);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default new ReplyController();

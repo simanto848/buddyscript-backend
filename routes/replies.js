@@ -8,5 +8,6 @@ const router = express.Router();
 router.use(authMiddleware);
 
 router.post("/:id/like", replyController.toggleLikeReply);
+router.delete("/:id", replyController.deleteReply);
 
 export default router;

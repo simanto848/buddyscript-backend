@@ -9,5 +9,6 @@ router.use(authMiddleware);
 
 router.post("/:id/like", commentController.toggleLikeComment);
 router.post("/:id/replies", commentController.addReply);
+router.delete("/:id", commentController.deleteComment);
 
 export default router;
