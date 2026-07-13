@@ -54,9 +54,10 @@ class PostService {
         }
 
         await post.save();
-        return await post
-            .populate("author", "firstName lastName avatar")
-            .populate("likes", "firstName lastName avatar");
+        return await post.populate([
+            { path: "author", select: "firstName lastName avatar" },
+            { path: "likes", select: "firstName lastName avatar" }
+        ]);
     }
 
     async addComment(postId, userId, text) {
