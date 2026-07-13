@@ -22,6 +22,16 @@ class AuthController {
         }
     };
 
+    async googleLogin (req, res, next) {
+        try {
+            const data = await AuthService.googleLogin(req.body);
+            const response = new ApiResponse(200, "Google login successful.", data);
+            return res.status(response.statusCode).json(response);
+        } catch (error) {
+            next(error);
+        }
+    };
+
     async getMe (req, res, next) {
         try {
             const response = new ApiResponse(200, "User profile retrieved successfully.", { user: req.user });
