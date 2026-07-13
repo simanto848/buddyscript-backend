@@ -16,5 +16,6 @@ router.delete("/:id", postController.deletePost);
 router.post("/:id/like", postController.toggleLikePost);
 router.post("/:id/comments", postController.addComment);
 router.get("/:id/comments", postController.getComments);
+router.post("/:id/share", postController.sharePost);
 
 export default router;

@@ -81,6 +81,16 @@ class PostController {
             next(error);
         }
     }
+
+    async sharePost(req, res, next) {
+        try {
+            const data = await PostService.sharePost(req.params.id, req.user._id, req.body.text);
+            const response = new ApiResponse(201, "Post shared successfully.", data);
+            return res.status(response.statusCode).json(response);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default new PostController();

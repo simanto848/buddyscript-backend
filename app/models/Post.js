@@ -31,6 +31,17 @@ const postSchema = new mongoose.Schema(
                 ref: "User",
             },
         ],
+
+        sharedFrom: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Post",
+            default: null,
+        },
+
+        shares: {
+            type: Number,
+            default: 0,
+        },
     },
     {
         timestamps: true,

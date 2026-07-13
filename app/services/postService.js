@@ -27,6 +27,31 @@ class PostService {
         return await post.populate("author", "firstName lastName avatar");
     }
 
+    async sharePost(postId, userId, text) {
+        const originalPost = await Post.findById(postId);
+        if (!originalPost) {
+            throw new ApiError(404, "Post not found.");
+        }
+
+        // Point to the root original post (not a share of a share)
+        const rootPostId = originalPost.sharedFrom || originalPost._id;
+
+        const sharedPost = await Post.create({
+            author: userId,
+            text: text || "",
+            sharedFrom: rootPostId,
+            visibility: "public",
+        });
+
+        // Increment share count on the root original post
+        await Post.findByIdAndUpdate(rootPostId, { $inc: { shares: 1 } });
+
+        return await sharedPost.populate([
+            { path: "author", select: "firstName lastName avatar" },
+            { path: "sharedFrom", populate: { path: "author", select: "firstName lastName avatar" } }
+        ]);
+    }
+
     async getPosts(authorId) {
         return await Post.find({
             $or: [
@@ -36,6 +61,7 @@ class PostService {
         })
         .populate("author", "firstName lastName avatar")
         .populate("likes", "firstName lastName avatar")
+        .populate({ path: "sharedFrom", populate: { path: "author", select: "firstName lastName avatar" } })
         .sort({ createdAt: -1 });
     }
 
