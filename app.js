@@ -5,8 +5,19 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import compression from "compression";
 import router from "./routes/index.js";
+import connectDB from "./configs/db.js";
 
 const app = express();
+
+// Database Connection Middleware (ensures connection before handling requests)
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
 
 app.use(helmet());
 const allowedOrigins = [process.env.CLIENT_URL];
